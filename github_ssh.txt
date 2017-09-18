@@ -15,6 +15,10 @@ git push origin master
 # 显示 You've successfully authenticated, but GitHub does not provide
 # shell access. 即成功
 
+git config --global user.name "Your Name"
+
+git config --global user.email you@example.com
+
 # git config --list  查看配置
 # git config --global user.name "用户名"
 # git config --global user.email "你注册github所用的邮箱地址"
