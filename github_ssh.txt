@@ -1,3 +1,9 @@
+git add .
+git commit -m "add files" .
+git push origin master
+
+
+
 生成公钥和秘钥
 #ssh-keygen -t rsa -C "你注册github所用的邮箱地址"
 

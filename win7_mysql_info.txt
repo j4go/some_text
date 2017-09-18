@@ -1,0 +1,18 @@
+mysql账号密码：
+root/root1205
+mysql端口：
+port=7105
+
+cmd启动/关闭
+net start/stop mysql
+
+cmd进入mysql：
+mysql -uroot -P 7105 -p
+
+更改密码：
+mysql>USE mysql;
+UPDATE user SET password=PASSWORD("root1205") WHERE user="root";
+FLUSH PRIVILEGES;
+
+mysql安装目录：
+C:\Program Files\MySQL\MySQL Server 5.5\
