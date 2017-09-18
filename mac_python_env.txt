@@ -1,0 +1,96 @@
+本机python版本：
+
+默认的python:
+python 2.7.13
+/Users/molock/anaconda2/bin/python
+位置：
+/Users/molock/anaconda2/lib/python2.7
+site-package:
+/Users/molock/anaconda2/lib/python2.7/site-packages
+pip:
+/Users/molock/anaconda2/bin/pip
+
+
+
+python3:
+python 3.5.2
+/usr/local/bin/python3
+位置：
+/usr/local/python3.5.2/lib/python3.5
+site-package:
+/usr/local/python3.5.2/lib/python3.5/site-packages
+pip:
+/usr/local/bin/pip3
+
+
+python2和python3都可以import ssl
+
+pip源: 
+全局安装flask到python3：
+sudo pip3 install flask -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com
+
+全局安装django：
+sudo pip3 install Django==1.11.5
+安装位置：
+python3 -c "import django; print(django.__path__)"
+/usr/local/python3.5.2/lib/python3.5/site-packages/django
+查看django版本：
+python3
+>>> import django
+>>> print(django.get_version())
+1.11.5
+或者直接执行：python3 -m django --version
+
+which django-admin.py
+/usr/local/python3.5.2/lib/python3.5/site-packages/django/bin/django-admin.py
+
+创建python3虚拟环境,最好在虚拟环境里面整，跟系统python环境隔离
+virtualenv dj --python=python3
+创建项目
+django-admin startproject origin
+
+cd origin / python manage.py runserver / python manage.py runserver 8080
+
+初始化数据库：
+
+pip install mysqlclient
+安装完出错：
+django.core.exceptions.ImproperlyConfigured: Error loading MySQLdb module: dlopen(/Users/molock/dj/lib/python3.5/site-packages/_mysql.cpython-35m-darwin.so, 2): Library not loaded: libmysqlclient.18.dylib
+  Referenced from: /Users/molock/dj/lib/python3.5/site-packages/_mysql.cpython-35m-darwin.so
+  Reason: image not found.
+解决方法：
+https://stackoverflow.com/questions/14363522/django-dev-server-error-image-not-found
+sudo ln -s /usr/local/mysql/lib/libmysqlclient.18.dylib /usr/lib/libmysqlclient.18.dylib
+sudo ln -s /usr/local/mysql/lib /usr/local/mysql/lib/mysql
+
+python manage.py migrate
+Apply all migrations: admin, auth, contenttypes, sessions
+
+polls的models建表
+python manage.py makemigrations polls
+
+查看某个migration文件或版本的sql语句：
+python manage.py sqlmigrate polls 0001
+
+python manage.py check 检查数据库是否有错误
+
+创建后台用户：
+python manage.py createsuperuser
+admin/admin123456
+
+本机mysql：
+root/root
+版本：5.6.35
+which mysqld: /usr/local/mysql-5.6.35-macos10.12-x86_64/bin/mysqld
+which mysqladmin: /usr/local/mysql-5.6.35-macos10.12-x86_64/bin/mysqladmin
+which mysqld_safe: /usr/local/mysql-5.6.35-macos10.12-x86_64/bin/mysqld_safe
+
+mysql官方下载地址：
+https://dev.mysql.com/downloads/mysql/
+
+msyql -uroot -p
+查看编码：
+show variables like "char%";
+set character_set_server=utf8;
+set character_set_database=utf8;
+

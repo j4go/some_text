@@ -1,0 +1,15 @@
+1.导出时候 name 增加display name
+3.如果top结果是null要转化成0  number的话 nvl nvl(sum(month_actual_amount),0)
+SELECT plm_lv2_fin_cls_name_en,
+       "Month_Actual_Amount"
+FROM
+  (SELECT plm_lv2_fin_cls_name_en AS plm_lv2_fin_cls_name_en,
+          nvl(sum(month_actual_amount),0) AS "Month_Actual_Amount"
+   FROM
+     (select *
+      from idcv_sales_pd_analysis_v
+      where rownum <= 2000000) expr_qry
+   GROUP BY plm_lv2_fin_cls_name_en
+   ORDER BY sum(month_actual_amount) DESC)
+WHERE ROWNUM <= 6
+4.排序点击出错，前端变形了
