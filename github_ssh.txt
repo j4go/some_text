@@ -1,4 +1,4 @@
-git add .
+git add .  / git lfs track file.zip if upload big file
 git commit -m "add files" .
 git push origin master
 
