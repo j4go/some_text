@@ -1,0 +1,63 @@
+生成公钥和秘钥
+#ssh-keygen -t rsa -C "你注册github所用的邮箱地址"
+
+# cd ~/.ssh/
+# id_rsa id_rsa.pub 生成两个文件
+# cat id_rsa.pub
+# 复制到github网站上创建ssh公钥
+# ssh -T git@github.com
+# 显示 You've successfully authenticated, but GitHub does not provide
+# shell access. 即成功
+
+# git config --list  查看配置
+# git config --global user.name "用户名"
+# git config --global user.email "你注册github所用的邮箱地址"
+# git config --global core.editro "vim"
+
+# mkdir /data/github 创建目录
+# cd /data/github
+
+以github仓库的拷贝来创建本地仓库：：：：：
+
+# git clone git@github.com:j4go/hello-world.git 复制github仓库 会创建
+# /data/github/hello-world
+
+# 用 git clone git://github.com/j4go/hello-world.git 这种形式
+# 不支持push 需要用 git clone git://github.com:j4go/hello-world.git
+
+
+
+
+先创建本地仓库再创建github仓库：：：：：
+
+# git init 初始化本地git仓库 此操作会创建.git文件夹
+
+
+
+
+# echo "this is a test file from centos" >> test.txt 本地创建一个文件
+
+
+
+
+
+# git add test.txt 添加到本地仓库
+# git commit -m "testing add file from centos" test.txt
+# 提交到本地仓库HEAD
+
+# git push origin master 将提交到HEAD的本地代码库提交到github仓库
+
+# git status来查看是否还有文件未提交 
+# 删除 origin：   git remote rm origin
+# 添加 oringin：  git remote add origin
+# git@github.com:j4go/hello-world.
+
+
+
+# 更新代码
+1. git status（查看本地分支文件信息，确保更新时不产生冲突）
+2. git checkout -- [file name] （若文件有修改，可以还原到最初状态; 若文件需要更新到服务器上，应该先merge到服务器，再更新到本地）
+3. git branch（查看当前分支情况）
+4. git checkout [remote branch](若分支为本地分支，则需切换到服务器的远程分支)
+5. git pull
+若命令执行成功，则更新代码成功！
