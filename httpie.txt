@@ -1,0 +1,10 @@
+
+http http://localhost:9999/health
+http http://localhost:9999/ping
+
+http -f POST http://localhost:9999/ping
+
+http http://localhost:9999/superset/testjson/abc/
+
+
+http -f POST http://localhost:9999/superset/testjson/lgf/ name=tt name2=ttt
