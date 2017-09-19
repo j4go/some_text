@@ -1,0 +1,15 @@
+cnpm install vue
+
+cnpm install --global vue-cli
+
+vue init webpack my-project
+
+cd my-project
+cnpm install
+cnpm run dev
+
+working dir:
+Users/molock/vuejs
+
+webpack：
+http://vuejs-templates.github.io/webpack/
