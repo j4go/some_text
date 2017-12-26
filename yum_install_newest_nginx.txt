@@ -1,0 +1,24 @@
+redhat6.6 nginx yum
+
+/etc/yum.repos.d
+
+1、准备yum源
+vi /etc/yum.repos.d/nginx.repo
+
+[nginx]
+name=nginx repo
+baseurl=http://nginx.org/packages/mainline/rhel/6/$basearch/
+gpgcheck=0
+enable=1
+
+准备好了源之后，更新源
+
+yum clean all
+yum makecache
+
+yum install -y nginx
+
+参考：
+http://blog.csdn.net/feinifi/article/details/71189708
+
+安装完是最新版

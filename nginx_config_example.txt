@@ -1,0 +1,174 @@
+
+example 1:
+
+user  nginx;
+worker_processes  2;
+
+error_log  /var/log/nginx/error.log warn;
+pid        /var/run/nginx.pid;
+
+
+events {
+    use epoll;
+    worker_connections  65535;
+}
+
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile        on;
+    tcp_nopush     on;
+    tcp_nodelay on;
+    keepalive_timeout  65;
+    gzip  on;
+
+    #limit_conn_zone $server_name zone=limitservers:10m;
+    #limit_conn_zone $binary_remote_addr zone=limitconn:10m;
+    #limit_req_zone $binary_remote_addr zone=limitreq:10m rate=40r/s;
+
+
+    upstream idiscover_server_pool {
+        server 127.0.0.1:8089 ;
+        #server 121.201.102.50:8055;
+    }
+
+    server {
+        listen       8088;
+        server_name  localhost;
+
+        if ($http_user_agent ~* (webbench|apachebench|siege|http_load)){
+           return 403;
+           #set $block_user_agents 1;
+        }
+
+        #limit_conn limitservers 3;
+        #limit_conn limitconn 9;
+        #limit_req zone=limitreq burst=200;
+
+        #limit_rate_after 1024k;
+        #limit_rate 200k;
+
+        access_log  /apps/superset/logs/nginx/access.log  main;
+
+        location / {
+            #fastcgi_connect_timeout    75;
+            #client_body_buffer_size 1024k;
+            #proxy_send_timeout 3600;
+            #proxy_read_timeout 3600;
+            #proxy_connect_timeout 75;
+            #proxy_buffers 32 128k;
+            #proxy_buffer_size 64k;
+            #proxy_busy_buffers_size 128k;
+
+            proxy_set_header    X-Real-IP            $remote_addr;
+            proxy_set_header    X-Forwarded-For      $proxy_add_x_forwarded_for;
+            proxy_set_header    Host                 $http_host;
+            proxy_set_header    X-NginX-Proxy        true;
+            proxy_set_header    Connection           "";
+            proxy_http_version  1.1;
+            proxy_pass          http://idiscover_server_pool/;
+        }
+    }
+
+
+
+
+   #include /etc/nginx/conf.d/*.conf;
+}
+
+
+
+
+example 2:
+
+worker_processes  6;
+worker_rlimit_nofile 65535;
+error_log  /dev/null;
+pid        logs/nginx.pid;
+events {
+    use epoll;
+    worker_connections  65535;
+}
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+    client_max_body_size    10m;
+    server_names_hash_bucket_size 128;
+    client_header_buffer_size 2k;
+    large_client_header_buffers 4 4k;
+    charset     utf-8;
+    open_file_cache max=65535 inactive=20s;
+    open_file_cache_min_uses 1;
+    open_file_cache_valid 30s;
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+    access_log  /dev/null;
+
+    sendfile       on;
+    tcp_nopush     on;
+    keepalive_timeout  60;
+    tcp_nodelay on;
+    gzip on;
+
+    limit_conn_zone $server_name zone=limitservers:10m;
+    limit_conn_zone $binary_remote_addr zone=limitconn:10m;
+    limit_req_zone $binary_remote_addr zone=limitreq:10m rate=40r/s;
+
+    upstream node_server_pool {
+        server 127.0.0.1:8055 ;
+        server 121.201.102.50:8055;
+    }
+
+    server {
+     listen 80 default_server;
+     server_name _;
+        return 444;
+    }
+
+    server {
+        listen       8021;
+        server_name  localhost;
+
+        if ($http_user_agent ~* (webbench|apachebench|siege|http_load)){
+           return 403;
+           #set $block_user_agents 1;
+        }
+
+        limit_conn limitservers 3;
+        limit_conn limitconn 9;
+        limit_req zone=limitreq burst=200;
+
+        limit_rate_after 1024k;
+        limit_rate 200k;
+
+        access_log  /raid/nginxlogs/dycircle.log  main;
+
+        location / {
+            fastcgi_connect_timeout    75;
+            client_body_buffer_size 1024k;
+            proxy_send_timeout 3600;
+            proxy_read_timeout 3600;
+            proxy_connect_timeout 75;
+            proxy_buffers 32 128k;
+            proxy_buffer_size 64k;
+            proxy_busy_buffers_size 128k;
+
+            proxy_set_header    X-Real-IP            $remote_addr;
+            proxy_set_header    X-Forwarded-For      $proxy_add_x_forwarded_for;
+            proxy_set_header    Host                 $http_host;
+            proxy_set_header    X-NginX-Proxy        true;
+            proxy_set_header    Connection           "";
+            proxy_http_version  1.1;
+            proxy_pass          http://node_server_pool/;
+        }  
+    }
+}

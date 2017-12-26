@@ -1,0 +1,24 @@
+linux squid代理服务器配置记录:
+参考链接：
+http://mofansheng.blog.51cto.com/8792265/1655196
+主要操作：
+yum install -y squid
+vim /etc/squid/squid.conf
+修改了端口：改成2487
+/etc/init.d/squid start    #启动squid服务
+squid  -k check    #可以检测配置文件是否有错；可以简写为-kche
+squid -k rec    #可以重新加载配置，reconfig的简写；
+service squid restart    #重启squid服务；重启经常性的很慢，可以先killall squid，在启动服务；
+
+记得开启防火墙iptables，配置好ip和端口
+
+客户端连接配置：
+参考：
+http://blog.csdn.net/mergerly/article/details/41963801
+
+~/.bashrc
+添加：
+export http_proxy=http://10.3.10.111:2487
+export https_proxy=http://10.3.10.111:2487
+export ftp_proxy=http://10.3.10.111:2487
+source生效

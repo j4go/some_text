@@ -1,0 +1,60 @@
+/etc/init/idiscover.conf
+# 测试服配置如下：
+
+description "The idiscover service"
+respawn
+respawn limit 15 5
+start on runlevel [2345]
+stop on runlevel [!2345]
+env LANG="en_US.utf8"
+env LC_ALL="en_US.UTF-8"
+env LC_LANG="en_US.UTF-8"
+env NLS_LANG='simplified chinese_china'.UTF8
+env ORACLE_SID=IBITST
+env LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/apps/svr/instantclient_11_1
+env ORACLE_SID=IBITST
+env PATH=/home/appd/work/py34new/bin:/apps/svr/instantclient_11_1:$PATH
+chdir /home/appd/work/py34new
+script
+#    cd /home/appd/work/py34new
+#    . bin/activate
+    exec gunicorn -w 4 -b 0.0.0.0:8088 superset:app > /home/appd/work/py34new/superset-0.15.1/log.txt 2>&1
+end script
+
+
+
+# 保存完重新初始化
+initctl reload-configuration
+# 列出列表
+initctl list
+# 出错信息
+cat /var/log/messages
+
+# 启动/关闭
+start idiscover/ stop idiscover
+# 重启
+restart idiscover
+
+
+
+################ 10.3.8.150 最新
+description "The idiscover service"
+respawn
+respawn limit 15 5
+start on runlevel [2345]
+stop on runlevel [!2345]
+env LANG="zh_CN.utf8"
+env LC_ALL="zh_CN.UTF-8"
+env LC_LANG="zh_CN.UTF-8"
+env NLS_LANG='simplified chinese_china'.UTF8
+#env NLS_LANG='AMERICAN_AMERICA.ZHS16GBK'
+env ORACLE_SID=IBITST
+env ORACLE_HOME=/opt/instantclient_11_2/instantclient_12_2
+env LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/instantclient_11_2/instantclient_12_2
+env PATH=/home/idi/work/py2713/bin:/opt/instantclient_11_2/instantclient_12_2:$PATH
+chdir /home/idi/work/py2713
+script
+    exec gunicorn -w 4 -b 0.0.0.0:8088 superset:app -t 600 --limit-request-field_size 0 --limit-request-line 0 >> /data/idiscover/logs/idi.log 2>&1
+end script
+
+
